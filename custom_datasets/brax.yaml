@@ -1,0 +1,83 @@
+# =============================================================================
+# BRAX Configuration
+# Breast X-ray images with disease classification
+# =============================================================================
+
+# Dataset Configuration
+dataset:
+  name: brax
+  train_csv: ./data/brax/finetune.csv
+  test_csv: ./data/brax/test.csv
+  dataset_dir: ./data/brax/
+  split:
+    train: "train"
+    val: "validation"
+    test: "test"
+  use_views: ["AP","PA","Lateral"]
+
+  # Image transformations (X-rays use normalization)
+  transforms:
+    - type: Resize
+      size: [256, 256]
+    - type: ToTensor
+    - type: Normalize
+      mean: [0.5, 0.5, 0.5]
+      std: [0.5, 0.5, 0.5]
+
+# Schema: Medical metadata and disease labels
+schema:
+  Sex:
+    type: categorical
+    num_classes: 2
+    vocab:
+      Male: 0
+      Female: 1
+    adapter_dim: 16
+    adapter_dim_arg: dim_sex
+    adapter_fwd_arg: e_sex
+    lora_dim: 1152
+
+  Age:
+    type: continuous
+    range: [0, 1]
+    adapter_dim: 16
+    adapter_dim_arg: dim_age
+    adapter_fwd_arg: e_age
+    lora_dim: 1152
+
+  View:
+    type: categorical
+    num_classes: 3
+    vocab:
+      PA: 0
+      AP: 1
+      LATERAL: 2
+    adapter_dim: 64
+    adapter_dim_arg: dim_view
+    adapter_fwd_arg: e_view
+    lora_dim: 1152
+
+  Device:
+    type: categorical
+    num_classes: 2
+    vocab:
+      No Device: 0
+      Device: 1
+    adapter_dim: 64
+    adapter_dim_arg: dim_device
+    adapter_fwd_arg: e_device
+    lora_dim: 1152
+
+  # Disease label — single binary parent matching the paper's SCM
+  Disease:
+    type: group_categorical
+    keys:
+      - Pleural Effusion
+    num_classes: 2
+    vocab:
+      No: 0
+      Yes: 1
+    adapter_dim: 64
+    adapter_dim_arg: dim_disease
+    adapter_fwd_arg: e_disease
+    lora_dim: 1152

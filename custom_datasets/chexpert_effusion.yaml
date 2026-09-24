@@ -1,0 +1,64 @@
+# =============================================================================
+# CheXpert Effusion Configuration (frontal views only)
+# Focused on Pleural Effusion intervention with demographic conditioning
+# =============================================================================
+
+# Dataset Configuration
+dataset:
+  name: chexpert_frontal
+  data_dir: ./data/chexpert_frontal
+  train_csv: ./data/chexpert_frontal/splits/finetune.csv
+  test_csv:  ./data/chexpert_frontal/splits/test.csv
+  split:
+    train: "train"
+    val: "validation"
+    test: "test"
+
+  transforms:
+    - type: ToTensor
+    - type: Normalize
+      mean: [0.5, 0.5, 0.5]
+      std: [0.5, 0.5, 0.5]
+
+# Schema: Medical metadata and Pleural Effusion
+schema:
+  Sex:
+    type: categorical
+    num_classes: 2
+    vocab:
+      Male: 0
+      Female: 1
+    adapter_dim: 16
+    adapter_dim_arg: dim_sex
+    adapter_fwd_arg: e_sex
+    lora_dim: 1152
+
+  Age:
+    type: continuous
+    range: [0, 1]
+    adapter_dim: 16
+    adapter_dim_arg: dim_age
+    adapter_fwd_arg: e_age
+    lora_dim: 1152
+
+  View:
+    type: categorical
+    num_classes: 2
+    vocab:
+      PA: 0
+      AP: 1
+    adapter_dim: 16
+    adapter_dim_arg: dim_view
+    adapter_fwd_arg: e_view
+    lora_dim: 1152
+
+  Pleural Effusion:
+    type: categorical
+    num_classes: 2
+    vocab:
+      No: 0
+      Yes: 1
+    adapter_dim: 16
+    adapter_dim_arg: dim_pe
+    adapter_fwd_arg: e_pe
+    lora_dim: 1152

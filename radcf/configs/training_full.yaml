@@ -1,0 +1,33 @@
+# =============================================================================
+# Full Fine-Tuning Training Configuration
+# =============================================================================
+
+training:
+  batch_size: 32
+  num_workers: 8
+  num_epochs: 100
+  learning_rate: 1.0e-4
+  weight_decay: 1.0e-2
+  gradient_clip: 1.0
+  gradient_accumulation_steps: 1
+  mixed_precision: "bf16"
+  checkpoint_every_n_steps: 30000
+  log_every_n_steps: 100
+  log_visualization_every_n_steps: 5000
+  report_to: "tensorboard"
+
+flow:
+  path_type: "linear"
+  prediction: "v"
+  weighting: "uniform"
+  proj_coeff: 0.5
+
+full:
+  cfg_dropout_prob: 0.1
+
+vae_update:
+  enabled: false
+  disc_pretrained_ckpt: null
+  loss_cfg_path: "radcf/configs/l1_lpips_kl_gan.yaml"
+  learning_rate: 1.0e-4
+  disc_learning_rate: 1.0e-4

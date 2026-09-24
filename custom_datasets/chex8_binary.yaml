@@ -1,0 +1,68 @@
+# =============================================================================
+# ChestX-ray8 Configuration
+# Chest X-ray images with multi-label disease classification
+# =============================================================================
+
+# Dataset Configuration
+dataset:
+  name: chex8_binary
+  data_dir: ./data/xray8_256
+  split:
+    train: "train"
+    val: "test"
+    test: "test"
+  ratio:  1.0
+
+  # Image transformations (X-rays use normalization)
+  transforms:
+#    - type: Resize
+#      size: [256, 256]
+    - type: ToTensor
+    - type: Normalize
+      mean: [0.5, 0.5, 0.5]
+      std: [0.5, 0.5, 0.5]
+
+# Schema: Medical metadata and disease labels
+schema:
+  Sex:
+    type: categorical
+    num_classes: 2
+    vocab:
+      Male: 0
+      Female: 1
+    adapter_dim: 16
+    adapter_dim_arg: dim_sex
+    adapter_fwd_arg: e_sex
+    lora_dim: 1152
+
+  Age:
+    type: continuous
+    range: [0, 1]  # Normalized age
+    adapter_dim: 16
+    adapter_dim_arg: dim_age
+    adapter_fwd_arg: e_age
+    lora_dim: 1152
+
+  View:
+    type: categorical
+    num_classes: 2
+    vocab:
+      PA: 0  # Posteroanterior
+      AP: 1  # Anteroposterior
+    adapter_dim: 64  # Higher capacity for view
+    adapter_dim_arg: dim_view
+    adapter_fwd_arg: e_view
+    lora_dim: 1152
+
+  # Disease labels (binary)
+  Disease:
+    type: categorical
+    num_classes: 2
+    vocab:
+      No: 0
+      Yes: 1
+    adapter_dim: 64
+    adapter_dim_arg: dim_disease
+    adapter_fwd_arg: e_disease
+    lora_dim: 1152
+

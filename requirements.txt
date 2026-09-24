@@ -1,0 +1,15 @@
+torch
+torchvision
+accelerate
+transformers
+diffusers
+peft
+omegaconf
+timm
+lpips
+pytorch-lightning
+torchmetrics
+torchxrayvision
+scikit-learn
+tensorboard
+wandb
